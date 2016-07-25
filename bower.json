@@ -6,7 +6,7 @@
     "Mingyu Gu <mingyugu0410@gmail.com>"
   ],
   "description": "An angular directive wrapper for Plupload.",
-  "main": "dist/angular-plupload.min.js",
+  "main": "dist/angular-jquery-plupload.min.js",
   "keywords": [
     "plupload",
     "upload",
