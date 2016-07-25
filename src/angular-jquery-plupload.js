@@ -113,40 +113,34 @@
                     scope: {
                         url: '=plupload',
                         options: '=pluploadOptions',
-                        callbacks: '=pluploadCallbacks',
-                        init: '=pluploadInit'
+                        callbacks: '=pluploadCallbacks'
                     },
                     link: function postLink(scope, element, attrs) {
-                        scope.$watch("init", function (newValue, oldValue) {
-                            if (newValue) {
-                                scope.init = false;
-                                var opts = pluploadOption;
+                        var opts = pluploadOption;
 
-                                opts.url = scope.url;
-                                opts.container = element[0];
-                                angular.extend(opts, scope.options);
+                        opts.url = scope.url;
+                        opts.browse_button = element[0];
+                        angular.extend(opts, scope.options);
 
-                                var uploader = new plupload.Uploader(opts);
+                        var uploader = new plupload.Uploader(opts);
 
-                                if (scope.callbacks) {
-                                    var callbackMethods = ['Init', 'PostInit', 'OptionChanged',
-                                        'Refresh', 'StateChanged', 'UploadFile', 'BeforeUpload', 'QueueChanged',
-                                        'UploadProgress', 'FilesRemoved', 'FileFiltered', 'FilesAdded',
-                                        'FileUploaded', 'ChunkUploaded', 'UploadComplete', 'Error', 'Destroy'];
-                                    angular.forEach(callbackMethods, function (method) {
-                                        var callback = (scope.callbacks[lowercaseFirstLetter(method)] || angular.noop);
-                                        uploader.bind(method, function () {
-                                            callback.apply(null, arguments);
-                                            if (!scope.$$phase && !scope.$root.$$phase) {
-                                                scope.$apply();
-                                            }
-                                        });
-                                    });
-                                }
+                        if (scope.callbacks) {
+                            var callbackMethods = ['Init', 'PostInit', 'OptionChanged',
+                                'Refresh', 'StateChanged', 'UploadFile', 'BeforeUpload', 'QueueChanged',
+                                'UploadProgress', 'FilesRemoved', 'FileFiltered', 'FilesAdded',
+                                'FileUploaded', 'ChunkUploaded', 'UploadComplete', 'Error', 'Destroy'];
+                            angular.forEach(callbackMethods, function (method) {
+                                var callback = (scope.callbacks[lowercaseFirstLetter(method)] || angular.noop);
+                                uploader.bind(method, function () {
+                                    callback.apply(null, arguments);
+                                    if (!scope.$$phase && !scope.$root.$$phase) {
+                                        scope.$apply();
+                                    }
+                                });
+                            });
+                        }
 
-                                uploader.init();
-                            }
-                        });
+                        uploader.init();
                     }
                 };
             }
